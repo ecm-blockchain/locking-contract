@@ -1,7 +1,7 @@
 {
-  "name": "ecmcoin-user-vesting",
+  "name": "ecmcoin-locking",
   "version": "1.0.0",
-  "description": "ECM Coin User Vesting smart contract deployment and management",
+  "description": "ECM Coin Locking smart contract for user-initiated 6-month lockups and owner withdrawals.",
   "main": "index.js",
   "scripts": {
     "clean": "hardhat clean",
@@ -9,13 +9,14 @@
     "test": "hardhat test",
     "test:logs": "hardhat test --trace",
     "watch": "hardhat watch compilation",
-    "flatten": "hardhat flatten contracts/Vestings.sol > flattened/Vestings.sol",
-    "deploy:network": "hardhat ignition deploy ignition/modules/vesting.ts --deployment-id ecm-deployment-v1 --network",
-    "deploy:verify": "hardhat ignition deploy ignition/modules/vesting.ts --verify --network ",
-    "verify:network": "hardhat ignition verify ecm-deployment-v1 --include-unrelated-contracts --network"
+    "flatten": "hardhat flatten contracts/Locking.sol > flattened/Locking.sol",
+    "deploy:network": "hardhat ignition deploy ignition/modules/locking.ts --deployment-id ecm-locking-v1 --network",
+    "deploy:verify": "hardhat ignition deploy ignition/modules/locking.ts --verify --network ",
+    "verify:network": "hardhat ignition verify ecm-locking-v1 --include-unrelated-contracts --network"
   },
   "author": "salmanbao <salmancodez@gmail.com>",
   "license": "MIT",
+  "keywords": ["ecmcoin", "locking", "erc20", "lockup", "withdraw", "smart contract", "hardhat"],
   "devDependencies": {
     "@nomicfoundation/ethereumjs-util": "^9.0.4",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
