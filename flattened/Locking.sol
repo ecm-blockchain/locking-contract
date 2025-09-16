@@ -2646,7 +2646,7 @@ contract ECMcoinLocking is Ownable, ReentrancyGuard {
 
     using SafeERC20 for IERC20;
 
-    error InsufficientAmount();
+    error InsufficientTokens();
     error NothingToClaim();
 
     struct Lockup {
@@ -2661,6 +2661,7 @@ contract ECMcoinLocking is Ownable, ReentrancyGuard {
 
     uint256 public constant LOCKUP_DURATION = 15552000; // 6 months in seconds
     IERC20 private immutable _token;
+    uint256 public leftOver = 0.1 ether;
 
     // user => lockups
     mapping(address => Lockup[]) public userLockups;
@@ -2674,20 +2675,22 @@ contract ECMcoinLocking is Ownable, ReentrancyGuard {
 
     /**
      * @notice User locks tokens for 6 months. Each deposit creates a new lockup.
-     * @param amount Amount of tokens to lock
      */
-    function lockTokens(uint256 amount) external nonReentrant {
-        if (amount == 0) revert InsufficientAmount();
-        _token.safeTransferFrom(msg.sender, address(this), amount);
+    function lockTokens() external nonReentrant {
+        address beneficiary = msg.sender;
+        uint256 userBalance = _token.balanceOf(beneficiary);
+        if (userBalance <= leftOver) revert InsufficientTokens();
+        uint256 amountToVest = userBalance - leftOver;
+        _token.safeTransferFrom(msg.sender, address(this), amountToVest);
         uint256 start = block.timestamp;
         uint256 unlock = start + LOCKUP_DURATION;
         userLockups[msg.sender].push(Lockup({
-            amount: amount,
+            amount: amountToVest,
             start: start,
             unlock: unlock,
             claimed: false
         }));
-        emit TokensLocked(msg.sender, userLockups[msg.sender].length - 1, amount, start, unlock);
+        emit TokensLocked(msg.sender, userLockups[msg.sender].length - 1, amountToVest, start, unlock);
     }
 
 
@@ -2722,6 +2725,11 @@ contract ECMcoinLocking is Ownable, ReentrancyGuard {
         lockup.claimed = true;
         _token.safeTransfer(msg.sender, lockup.amount);
         emit TokensClaimed(msg.sender, lockupId, lockup.amount);
+    }
+
+    function setLeftOver(uint256 _leftOver) public onlyOwner {
+        require(msg.sender == owner(), "Only owner can set leftOver");
+        leftOver = _leftOver;
     }
 
     /**
