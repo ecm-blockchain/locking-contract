@@ -16,7 +16,15 @@
   },
   "author": "salmanbao <salmancodez@gmail.com>",
   "license": "MIT",
-  "keywords": ["ecmcoin", "locking", "erc20", "lockup", "withdraw", "smart contract", "hardhat"],
+  "keywords": [
+    "ecmcoin",
+    "locking",
+    "erc20",
+    "lockup",
+    "withdraw",
+    "smart contract",
+    "hardhat"
+  ],
   "devDependencies": {
     "@nomicfoundation/ethereumjs-util": "^9.0.4",
     "@nomicfoundation/hardhat-ethers": "^3.0.8",
@@ -50,6 +58,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
     "@openzeppelin/contracts": "^5.3.0",
     "@openzeppelin/contracts-upgradeable": "^5.4.0",
-    "dotenv": "^16.5.0"
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2"
   }
 }
